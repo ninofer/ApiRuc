@@ -5,6 +5,6 @@ import controller from '../controllers/sifen.controller.js'
 const router = express.Router();
 
 // Consultar Ruc
-router.get("/consulta-ruc", controller.consultaRuc);
+router.get("/consulta-ruc", controller.askRuc);
 
 export default router;
