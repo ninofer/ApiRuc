@@ -1,7 +1,12 @@
-import express from "express";
-import bodyParser from "body-parser";
-import dotenv from 'dotenv';
-import router from "./src/routes/sifen.route.js";
+//import express from "express";
+//import bodyParser from "body-parser";
+//import dotenv from 'dotenv';
+//import router from "./src/routes/sifen.route.js";
+
+const express = require("express");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const router = require("./src/routes/sifen.route.js");
 
 dotenv.config();
 const app = express();
@@ -13,8 +18,7 @@ app.use(bodyParser.json());
 // Endpoint para consultar el Ruc
 app.use("/api/sifen", router);
 
-
 // Iniciar servidor
-app.listen(PORT, ()=> {
-    console.log(`Servidor corriendo en el puerto ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
