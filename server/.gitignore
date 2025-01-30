@@ -1,4 +1,4 @@
 node_modules/
 .vscode/
-./src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12/
-.env/
+.env 
+src/certs/
