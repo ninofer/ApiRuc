@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import router from "./src/routes/sifen.route.js";
 
 dotenv.config();
@@ -14,6 +14,6 @@ app.use(bodyParser.json());
 app.use("/api/sifen", router);
 
 // Iniciar servidor
-app.listen(PORT, ()=> {
-    console.log(`Servidor corriendo en el puerto ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
