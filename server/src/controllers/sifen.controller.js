@@ -1,5 +1,4 @@
-//import setApi from "facturacionelectronicapy-setapi";
-const setApi = require("facturacionelectronicapy-setapi");
+import setApi from "facturacionelectronicapy-setapi";
 
 const askRuc = async (req, res) => {
   try {

@@ -1,12 +1,7 @@
-//import express from "express";
-//import bodyParser from "body-parser";
-//import dotenv from 'dotenv';
-//import router from "./src/routes/sifen.route.js";
-
-const express = require("express");
-const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
-const router = require("./src/routes/sifen.route.js");
+import express from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import router from "./src/routes/sifen.route.js";
 
 dotenv.config();
 const app = express();
