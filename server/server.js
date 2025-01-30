@@ -13,7 +13,6 @@ app.use(bodyParser.json());
 // Endpoint para consultar el Ruc
 app.use("/api/sifen", router);
 
-
 // Iniciar servidor
 app.listen(PORT, ()=> {
     console.log(`Servidor corriendo en el puerto ${PORT}`)

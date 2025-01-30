@@ -38,6 +38,8 @@ const askRuc = async (req, res) => {
     }
 };
 
+
+
 export default {
     askRuc,
 };
