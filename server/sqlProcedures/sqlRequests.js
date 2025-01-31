@@ -10,9 +10,23 @@ export async function getDataById(id) {
                 { name: 'id', type: sql.Int, value: id }
             ]
         });
+        console.log(result.recordset);
         return result.recordset;
     } catch (err) {
         console.error('Error en getDataById:', err);
+        throw err;
+    }
+}
+
+export async function getDataString(query) {
+    try {
+        const result = await executeRequest({
+            query: query
+        })
+        console.log(result.recordset)
+        return result.recordset
+    } catch (error) {
+        console.error('Error en getDataInterger:', err);
         throw err;
     }
 }

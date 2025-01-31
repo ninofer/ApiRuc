@@ -30,6 +30,7 @@ export async function executeRequest({
     inputs = [], 
     outputs = [], 
     isStoredProcedure = false 
+    
 }) {
     const pool = await sql.connect(config); // Usa el pool existente
     

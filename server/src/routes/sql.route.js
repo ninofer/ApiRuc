@@ -3,6 +3,10 @@ import sqlController from "../controllers/sql.controller.js";
 
 const router = express.Router();
 
-router.get("/cdc/:id", sqlController.getDataId)
+//Para Id
+router.get("/:id", sqlController.getDataId)
+
+//Para interger
+router.get("/interger/:id", sqlController.getDataInt)
 
 export default router;
