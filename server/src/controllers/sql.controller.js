@@ -14,7 +14,7 @@ const getDataId = async (req, res) => {
             mensaje: "Consulta exitosa",
             respuesta: data,
           });
-        
+
     } catch (err) {
         console.error('Error en getDataById:', err);
         res.status(500).json({

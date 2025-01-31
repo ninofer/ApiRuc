@@ -25,8 +25,9 @@ export async function getDataString(query) {
         })
         console.log(result.recordset)
         return result.recordset
-    } catch (error) {
-        console.error('Error en getDataInterger:', err);
+    } catch (err) {
+        console.error('Error en getDataString:', err);
         throw err;
     }
 }
+
