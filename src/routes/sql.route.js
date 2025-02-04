@@ -10,6 +10,6 @@ router.get("/:id", sqlController.getDataId);
 router.get("/interger/:id", sqlController.getDataS);
 
 //armar json params
-router.get("/xmlGen/:id", sqlController.getDataS);
+router.get("/xmlGen/:id", sqlController.parametrosJson);
 
 export default router;
