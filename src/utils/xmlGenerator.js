@@ -299,12 +299,12 @@ export const getParamData = async (id) => {
     return {
       codigo: item.dCodInt.trim(),
       descripcion: descripcionItemData[index]?.dDesProSer.trim() || null,
-      unidadMedida: unidadMedidaItemData[index]?.cUniMed.trim() || null,
-      cantidad: cantidadItemData[index]?.dCantProSer.trim() || null,
-      precioUnitario: precioUnitarioItemData[index]?.dPUniProSer.trim() || null,
-      ivaTipo: ivaTipoItemData[index]?.iAfecIVA.trim() || null,
-      ivaBase: ivaBaseItemData[index]?.dPropIVA.trim() || null,
-      iva: ivaItemData[index]?.dTasaIVA.trim() || null,
+      unidadMedida: unidadMedidaItemData[index]?.cUniMed || null,
+      cantidad: cantidadItemData[index]?.dCantProSer || null,
+      precioUnitario: precioUnitarioItemData[index]?.dPUniProSer || null,
+      ivaTipo: ivaTipoItemData[index]?.iAfecIVA || null,
+      ivaBase: ivaBaseItemData[index]?.dPropIVA || null,
+      iva: ivaItemData[index]?.dTasaIVA || null,
     };
   });
 

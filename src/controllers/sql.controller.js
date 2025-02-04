@@ -1,6 +1,5 @@
 import { getDataById, getDataString } from "../../sqlProcedures/sqlRequests.js";
-import { getParams } from "../utils/xmlGenerator.js";
-import { getDataParams } from "../utils/xmlGenerator.js";
+import { getParamData, getParams } from "../utils/xmlGenerator.js";
 
 const getDataId = async (req, res) => {
   try {
@@ -67,8 +66,29 @@ const parametrosJson = async (req, res) => {
   }
 };
 
+const parametrosDataJson = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ mensaje: "Faltan parámetros: id" });
+    }
+
+    const data = await getParamData(id);
+
+    res.status(200).json({ data });
+  } catch (err) {
+    console.error("Error en getDataString:", err);
+    res.status(500).json({
+      error: "Error al consultar detDataString",
+      mensaje: err.message,
+    });
+  }
+};
+
 export default {
   getDataId,
   getDataS,
   parametrosJson,
+  parametrosDataJson,
 };
