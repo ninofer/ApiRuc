@@ -1,6 +1,6 @@
 import { getDataById, getDataString, getDataBoolean, getDataFecha } from "../../sqlProcedures/sqlRequests.js";
 import xmlgen from 'facturacionelectronicapy-xmlgen';
-
+import xmlsign from 'facturacionelectronicapy-xmlsign';
 
 export const getParams = async (id) => {
   // Ejecuta cada consulta y guarda el resultado
@@ -400,9 +400,23 @@ const generadorDeXML = async (id) => {
 
   
   if (parametros && data) {
-    const xml = xmlgen.default.generateXMLDE(parametros, data)
+    const xml = xmlgen.generateXMLDE(parametros, data)
     console.log(xml)
   }
 }
+const firmadorDeXML = async (id) => {
+  const parametros = await getParams(id);
+  const data = await getParamData(id);
 
-generadorDeXML(4812228)
+  if (parametros && data) {
+    console.log("Entre aca");
+    // Esperamos que generateXMLDE resuelva y retorne el XML como cadena
+    const xml = await xmlgen.default.generateXMLDE(parametros, data);
+    // Ahora llamamos a signXML pasando el XML ya resuelto
+    xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
+      .then(xmlFirmado => console.log(xmlFirmado))
+      .catch(err => console.error("Error al firmar XML:", err));
+  }
+};
+
+firmadorDeXML(4812228);
