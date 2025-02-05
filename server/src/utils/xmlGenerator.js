@@ -1,6 +1,8 @@
 import { getDataById, getDataString, getDataBoolean, getDataFecha } from "../../sqlProcedures/sqlRequests.js";
 import xmlgen from 'facturacionelectronicapy-xmlgen';
 import xmlsign from 'facturacionelectronicapy-xmlsign';
+import qrgen from 'facturacionelectronicapy-qrgen';
+
 
 export const getParams = async (id) => {
   // Ejecuta cada consulta y guarda el resultado
@@ -404,6 +406,7 @@ const generadorDeXML = async (id) => {
     console.log(xml)
   }
 }
+
 const firmadorDeXML = async (id) => {
   const parametros = await getParams(id);
   const data = await getParamData(id);
@@ -413,10 +416,17 @@ const firmadorDeXML = async (id) => {
     // Esperamos que generateXMLDE resuelva y retorne el XML como cadena
     const xml = await xmlgen.default.generateXMLDE(parametros, data);
     // Ahora llamamos a signXML pasando el XML ya resuelto
-    xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
-      .then(xmlFirmado => console.log(xmlFirmado))
+    const xmlFirmado = await xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
       .catch(err => console.error("Error al firmar XML:", err));
+
+    const QrFinal = qrgen.default
+                    .generateQR(xmlFirmado)
+                    .then(xml => console.log("XML con QR", xml));
+
+
   }
+
 };
 
-firmadorDeXML(4812228);
+firmadorDeXML(4812228)
+
