@@ -53,10 +53,14 @@ export async function getDataBoolean(query) {
     const result = await executeRequest({
       query: query,
     });
-    //console.log(result.recordset)
+    console.log(result.recordset)
     if (result.recordset[0].resultadoFinal === 1) {
       return true;
-    } else return false
+    } 
+    else {
+      console.log("SOY FALSO")
+      return false
+    }
   } catch (err) {
     console.error("Error en getDataBoolean:", err);
     throw err;

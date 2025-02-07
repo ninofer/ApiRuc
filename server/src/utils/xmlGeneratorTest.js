@@ -159,7 +159,7 @@ export const getParamData = async (id) => {
               else 0
             end) as resultadoFinal
      FROM tmpFactuDE_D3 WHERE idMov = ${id}`
-  ); 
+  )
   const rucData = await getDataString(
     `SELECT rtrim(dRucRec) + '-' + ltrim(dDVRec) as rucCliente FROM tmpFactuDE_D3 WHERE idMov = ${id}`
   );
@@ -326,7 +326,7 @@ export const getParamData = async (id) => {
     condicionTipoCambio: condicionTipoCambioData[0]?.dCondTiCam || null,
     cambio: cambioData[0]?.dTiCam || null,
     cliente: {
-      contribuyente: contribuyenteData.resultadoFinal,
+      contribuyente: contribuyenteData.resultadoFinal || false,
       ruc: rucData[0]?.rucCliente || null,
       razonSocial: razonSocialData[0]?.dNomRec || null,
       nombreFantasia: nombreFantasiaData[0]?.dNomFanRec || null,
@@ -356,8 +356,9 @@ export const getParamData = async (id) => {
     },
     condicion: {
       tipo: tipoCondicionData[0]?.iCondOpe || null,
-      ...(tipoCondicionData[0]?.iCondOpe === 1 ? {  // Tipo 1: Contado
-          contado: {
+      ...(tipoCondicionData[0]?.iCondOpe === 1 ? {
+          entregas: [{
+              tipo: tipoCondicionData[0]?.iCondOpe || null,
               monto: montoData[0]?.dMonTiPag || null,
               moneda: nombreMonedaData[0]?.cMoneTiPag || null,
               cambio: cambioMonedaData[0]?.dTiCamTiPag || null,
@@ -367,21 +368,21 @@ export const getParamData = async (id) => {
                   ruc: rucTarjetaData[0]?.dRUCProTar || null,
                   razonSocial: razonSocialTarjetaData[0]?.dRSProTar || null,
                   medioPago: medioPagoTarjetaData[0]?.iForProPa || null,
-                  codigoAutorizacion: codigoAutorizacionTarjetaData[0]?.dCodAuOpe || null,
+                  codigoAutorizacion: codigoAutorizacionTarjetaData[0]?.dCodAuOpe || null
+              },
               infoCheque: {
                   numeroCheque: nroChequeData[0]?.dNumCheq || null,
                   banco: bancoChequeData[0]?.dBcoEmi || null,
-              },
-            }
-          }
+              }
+          }]
       } : {}),
-      ...(tipoCondicionData[0]?.iCondOpe === 2 ? {  // Tipo 2: Crédito
+      ...(tipoCondicionData[0]?.iCondOpe === 2 ? {
           credito: {
               tipo: tipoCreditoData[0]?.iCondCred || null,
               plazo: plazoCreditoData[0]?.dPlazoCre || null,
           }
       } : {})
-    },
+    },    
       items: 
         codigoItemData.map((item, index) => {
           return {
@@ -397,6 +398,7 @@ export const getParamData = async (id) => {
       },
     ),
 }}
+
 const generadorDeXML = async (id) => {
   const parametros = await getParams(id)
   const data = await  getParamData(id)
