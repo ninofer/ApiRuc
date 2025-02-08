@@ -204,7 +204,7 @@ export const getParamData = async (id) => {
   ); 
   const tipoContribuyenteData = await getDataString(
     `SELECT iTiContRec FROM tmpFactuDE_D3 WHERE idMov = ${id}`
-  ); 
+  )
   const documentoTipoData = await getDataString(
     `SELECT iTipIDRec FROM tmpFactuDE_D3 WHERE idMov = ${id}`
   ); 
@@ -310,7 +310,8 @@ export const getParamData = async (id) => {
     `SELECT dTasaIVA FROM tmpFactuDE_E82 WHERE idMov = ${id}`
   );
 
-
+  const respuesta = await contribuyenteData.resultadoFinal;
+  console.log(respuesta)
   return {
     tipoDocumento: tipoDocumentoData[0]?.iTiDE || null,
     establecimiento: establecimientoData[0]?.dEst || null,
@@ -326,7 +327,7 @@ export const getParamData = async (id) => {
     condicionTipoCambio: condicionTipoCambioData[0]?.dCondTiCam || null,
     cambio: cambioData[0]?.dTiCam || null,
     cliente: {
-      contribuyente: contribuyenteData.resultadoFinal || false,
+      contribuyente: contribuyenteData || false,
       ruc: rucData[0]?.rucCliente || null,
       razonSocial: razonSocialData[0]?.dNomRec || null,
       nombreFantasia: nombreFantasiaData[0]?.dNomFanRec || null,
@@ -343,7 +344,7 @@ export const getParamData = async (id) => {
       pais: paisData[0]?.cPaisRec || null,
       paisDescripcion: paisDescripcionData[0]?.dDesPaisRe || null,
       tipoContribuyente: tipoContribuyenteData[0]?.iTiContRec || null,
-      documentoTipo: documentoTipoData[0]?.iTipIDRec || null,
+      documentoTipo: documentoTipoData[0]?.iTipIDRec,
       documentoNumero: documentoNumeroData[0]?.dNumIDRec || null,
       telefono: telefonoData[0]?.dTelRec || null,
       celular: celularData[0]?.dCelRec || null,
