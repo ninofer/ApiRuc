@@ -4,7 +4,7 @@ import fs from "fs";
  * Función para leer el contenido de un archivo de forma síncrona.
  * Se especifica la codificación 'utf8' para obtener directamente el string.
  */
-function readFile(filePath) {
+const readFile = (filePath) => {
   try {
     const data = fs.readFileSync(filePath, "utf8");
     return data;
@@ -17,7 +17,7 @@ function readFile(filePath) {
  * Función que utiliza una expresión regular para extraer las etiquetas y sus valores.
  * Se valida que la etiqueta de apertura y cierre coincidan.
  */
-function parseConfig(data) {
+const parseConfig = (data) => {
   const regex = /<([^>]+)>(.*?)<\/\1>/gs;
   const config = {};
   let match;
@@ -36,12 +36,19 @@ function parseConfig(data) {
  */
 const getValorVariable = async (req, res) => {
   try {
-    const configData = readFile("C:/FacturaElectronica/configFactura.txt");
+        // Ruta absoluta del certificado
+      const configPath = path.join(
+          __dirname,
+          "FacturacionElectronica",
+          "configFactura.txt"
+        );
+    const configData = readFile(configPath);
     if (!configData) {
       throw new Error("No se pudo leer el archivo de configuración.");
     }
 
-    const nombreClave = req.body;
+    const nombreClave = req.body.nombreClave;
+
     
     // Obtiene un objeto con los datos, por ejemplo:
     // { servidor: "192.168.1.190", nombreFirma: "c:\FacturaElectronica\PEDRO_...", ... }
