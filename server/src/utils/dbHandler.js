@@ -54,6 +54,8 @@ const getConexion = async () => {
     const claveBd = config["claveBd"];
     const puerto = config["puerto"]
 
+    console.log(servidor, nombreDB, usuario, claveBd, puerto)
+
     //console.log(`Respuesta: ` + servidor);
 
 

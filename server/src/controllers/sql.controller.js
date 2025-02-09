@@ -114,6 +114,43 @@ const getXMLControler = async (req, res) => {
       const xmlFirmado = await xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
       .catch(err => console.error("Error al firmar XML:", err));
 
+      res.status(200).send(xmlFirmado);
+        // Aquí ya puedes trabajar con la cadena del QR (qrString)
+      };  
+    }
+
+   catch (err) {
+    console.error("Error en getXMLControler:", err);
+    res.status(500).json({
+      error: "Error al en getXMLControler: ",
+      mensaje: err.message,
+    });
+  }
+}
+
+const getQRControler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Aqui se desestructura data del body del request
+    //const { data } = req.body;
+    
+    if (!id) {
+      return res.status(400).json({ mensaje: "Faltan parámetros: id" });
+    }
+
+    //Para usar cuando el cliente envie el json (te lee el body)
+    //const data = await getXML(id);
+
+    const parametros = await getParams(id);
+    const data = await getParamData(id);
+
+    if (parametros && data) {
+      // Crea el XML
+      const xml = await xmlgen.default.generateXMLDE(parametros, data);
+      //Aqui se firma el XML
+      const xmlFirmado = await xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
+      .catch(err => console.error("Error al firmar XML:", err));
+
       //Aqui se genera el QR
       const QrFinal = await qrgen.default.generateQR(xmlFirmado);
       
@@ -150,5 +187,6 @@ export default {
   getDataS,
   parametrosJson,
   parametrosDataJson,
-  getXMLControler
+  getXMLControler,
+  getQRControler
 };

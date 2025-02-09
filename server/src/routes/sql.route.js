@@ -15,7 +15,9 @@ router.get("/parametros/:id", sqlController.parametrosJson);
 //armar json dataparams
 router.get("/xmlDataParams/:id", sqlController.parametrosDataJson);
 
+router.get("/xml/:id", sqlController.getXMLControler)
+
 //armar XML completo
-router.get("/qr/:id", sqlController.getXMLControler);
+router.get("/qr/:id", sqlController.getQRControler);
 
 export default router;
