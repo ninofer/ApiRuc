@@ -10,9 +10,14 @@ router.get("/:id", sqlController.getDataId);
 router.get("/interger/:id", sqlController.getDataS);
 
 //armar json params
-router.get("/xmlGen/:id", sqlController.parametrosJson);
+router.get("/parametros/:id", sqlController.parametrosJson);
 
 //armar json dataparams
 router.get("/xmlDataParams/:id", sqlController.parametrosDataJson);
+
+router.get("/xml/:id", sqlController.getXMLControler)
+
+//armar XML completo
+router.get("/qr/:id", sqlController.getQRControler);
 
 export default router;
