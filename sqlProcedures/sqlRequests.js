@@ -53,14 +53,13 @@ export async function getDataBoolean(query) {
     const result = await executeRequest({
       query: query,
     });
-    console.log(result.recordset)
-    if (result.recordset[0].resultadoFinal === 1) {
+    console.log(result.recordset);
+    // Verifica que el recordset tenga al menos un registro
+    if (result.recordset.length > 0 && result.recordset[0].resultadoFinal === 1) {
       return true;
-    } 
-    else {
-      console.log("SOY FALSO")
-      return false
     }
+    // Si no hay registros o el valor no es 1, retorna false (o el valor que consideres adecuado)
+    return false;
   } catch (err) {
     console.error("Error en getDataBoolean:", err);
     throw err;

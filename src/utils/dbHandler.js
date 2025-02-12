@@ -38,7 +38,7 @@ const parseConfig = (data) => {
 const getConexion = async () => {
   try {
 
-    const configData = readFile("/home/sebastian/FacturaElectronica/configFactura.txt");
+    const configData = readFile("C:/FacturaElectronica/configFactura.txt");
     if (!configData) {
       throw new Error("No se pudo leer el archivo de configuración.");
     }
