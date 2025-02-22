@@ -109,9 +109,12 @@ export const getParamsCredito = async (id) => {
 
 
 export const getDataCredito = async (id) => {
-// Ejecuta cada consulta y guarda el resultado
-const tipoDocumentoData = await getDataString(
+  // Ejecuta cada consulta y guarda el resultado
+  const tipoDocumentoData = await getDataString(
     `SELECT iTiDE FROM tmpFactuDE_C WHERE tipo = 5 and idMov = ${id}`
+  );
+  const numeroTimbradoData = await getDataString(
+    `SELECT dNumTim FROM tmpFactuDE_C WHERE tipo = 5 and idMov = ${id}`
   );
   const establecimientoData = await getDataString(
     `SELECT dEst from tmpFactuDE_C WHERE tipo = 5 and idMov = ${id}`
@@ -386,3 +389,5 @@ const generadorDeXML = async (id) => {
   
   //dataRemision();
   generadorDeXML(33)
+
+

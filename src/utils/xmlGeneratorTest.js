@@ -4,6 +4,7 @@ import xmlsign from 'facturacionelectronicapy-xmlsign';
 import qrgen from 'facturacionelectronicapy-qrgen';
 import xml2js from 'xml2js';
 
+import { configuracionGlobal } from "../../config/configRoute.js";
 
 export const getParams = async (id) => {
   // Ejecuta cada consulta y guarda el resultado
@@ -392,9 +393,9 @@ export const getParamData = async (id) => {
             unidadMedida: unidadMedidaItemData[index]?.cUniMed || null,
             cantidad: cantidadItemData[index]?.dCantProSer || null,
             precioUnitario: precioUnitarioItemData[index]?.dPUniProSer || null,
-            ivaTipo: ivaTipoItemData[index]?.iAfecIVA || null,
-            ivaBase: ivaBaseItemData[index]?.dPropIVA || null,
-            iva: ivaItemData[index]?.dTasaIVA || null,
+            ivaTipo: ivaTipoItemData[index]?.iAfecIVA ,
+            ivaBase: ivaBaseItemData[index]?.dPropIVA ,
+            iva: ivaItemData[index]?.dTasaIVA ,
           };
       },
     ),
@@ -406,10 +407,11 @@ const generadorDeXML = async (id) => {
 
   
   if (parametros && data) {
-    const xml = xmlgen.generateXMLDE(parametros, data)
+    const xml = xmlgen.default.generateXMLDE(parametros, data)
     console.log(xml)
   }
 }
+
 
 const firmadorDeXML = async (id) => {
   const parametros = await getParams(id);
@@ -420,7 +422,7 @@ const firmadorDeXML = async (id) => {
     // Esperamos que generateXMLDE resuelva y retorne el XML como cadena
     const xml = await xmlgen.default.generateXMLDE(parametros, data);
     // Ahora llamamos a signXML pasando el XML ya resuelto
-    const xmlFirmado = await xmlsign.default.signXML(xml, './src/certs/RAMON_MYSKO_BUBEN_VIT_S_A.p12', 'PBRI111533')
+    const xmlFirmado = await xmlsign.default.signXML(xml, configuracionGlobal.firma, configuracionGlobal.claveFirma)
       .catch(err => console.error("Error al firmar XML:", err));
 
     const QrFinal = await qrgen.default.generateQR(xmlFirmado)//.then(xml => console.log("XML con QR", xml));

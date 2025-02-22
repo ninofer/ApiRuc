@@ -17,7 +17,10 @@ router.get("/xmlDataParams/:id", sqlController.parametrosDataJson);
 
 router.get("/xml/:id", sqlController.getXMLControler)
 
-//armar XML completo
-router.get("/qr/:id", sqlController.getQRControler);
+// QR FACTURA
+router.get("/qrFactura/:id", sqlController.getQRFacturaControler);
+
+// QR REMISION 
+router.get("/qrRemision/:id", sqlController.getQRRemisionControler);
 
 export default router;

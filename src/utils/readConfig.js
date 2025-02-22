@@ -30,46 +30,45 @@ const parseConfig = (data) => {
   return config;
 }
 
-/**
- * Función asíncrona que lee el archivo de configuración, lo parsea y extrae
- * los valores de las etiquetas que te interesan (por ejemplo, "nombreFirma" y "claveFirma").
- */
-const getValorVariable = async (req, res) => {
-  try {
-        // Ruta absoluta del certificado
-      const configPath = path.join(
-          __dirname,
-          "FacturacionElectronica",
-          "configFactura.txt"
-        );
-    const configData = readFile(configPath);
+
+export const getInformacion = () => {
+
+try {
+
+    const configData = readFile("C:/FacturaElectronica/configFactura.txt");
     if (!configData) {
       throw new Error("No se pudo leer el archivo de configuración.");
     }
-
-    const nombreClave = req.body.nombreClave;
-
     
     // Obtiene un objeto con los datos, por ejemplo:
     // { servidor: "192.168.1.190", nombreFirma: "c:\FacturaElectronica\PEDRO_...", ... }
     const config = parseConfig(configData);
     //console.log(config)
     // Extrae los campos que te interesan
-    const nombreClaveFinal = config[nombreClave.nombreClave];
+    const servidor = config["servidor"];
+    const nombreDB = config["nombreDB"];
+    const usuario = config["usuario"];
+    const claveBd = config["claveBd"];
+    const puerto = config["puerto"];
+    const firma = config["nombreFirma"];
+    const claveFirma = config["claveFirma"];
 
-    console.log(`Respuesta: ` + nombreClaveFinal);
+    //console.log(servidor, nombreDB, usuario, claveBd, puerto, firma, claveFirma)
+
+    //console.log(`Respuesta: ` + servidor);
 
 
     // Aquí puedes continuar con el procesamiento o devolver los valores
-    return { nombreClave };
+    return {  
+      servidor,
+      nombreDB,
+      usuario,
+      claveBd,
+      puerto,
+      firma,
+      claveFirma
+    };
   } catch (err) {
-    console.error("Error en getValorVariable:", err);
-    // Si estás en un entorno Express, podrías responder así:
-    // res.status(500).json({
-    //   error: "Error al consultar data",
-    //   mensaje: err.message,
-    // });
+    console.error("Error en getInformacion:", err);
   }
 };
-
-export default { getValorVariable };

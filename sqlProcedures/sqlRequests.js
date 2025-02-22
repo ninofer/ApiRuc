@@ -53,7 +53,6 @@ export async function getDataBoolean(query) {
     const result = await executeRequest({
       query: query,
     });
-    console.log(result.recordset);
     // Verifica que el recordset tenga al menos un registro
     if (result.recordset.length > 0 && result.recordset[0].resultadoFinal === 1) {
       return true;
