@@ -392,9 +392,9 @@ export const getDataFacturaExportacion = async (id) => {
             unidadMedida: unidadMedidaItemData[index]?.cUniMed || null,
             cantidad: cantidadItemData[index]?.dCantProSer || null,
             precioUnitario: precioUnitarioItemData[index]?.dPUniProSer || null,
-            ivaTipo: ivaTipoItemData[index]?.iAfecIVA || null,
-            ivaBase: ivaBaseItemData[index]?.dPropIVA || null,
-            iva: ivaItemData[index]?.dTasaIVA || null,
+            ivaTipo: ivaTipoItemData[index]?.iAfecIVA,
+            ivaBase: ivaBaseItemData[index]?.dPropIVA,
+            iva: ivaItemData[index]?.dTasaIVA,
           };
       },
     ),
