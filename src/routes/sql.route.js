@@ -20,7 +20,13 @@ router.get("/xml/:id", sqlController.getXMLControler)
 // QR FACTURA
 router.get("/qrFactura/:id", sqlController.getQRFacturaControler);
 
+// QR FACTURA EXPORTACION
+router.get("/qrFacturaExportacion/:id", sqlController.getQRFacturaExportacionControler)
+
 // QR REMISION 
 router.get("/qrRemision/:id", sqlController.getQRRemisionControler);
+
+// QR REMISION EXPORTACION
+router.get("/qrRemisionExportacion/:id", sqlController.getQRRemisionExportacionControler)
 
 export default router;
