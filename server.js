@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 // Para que mi api pueda utilizar json en mis bodys
 app.use(bodyParser.json());
 
-//console.log("Hola");
 // Endpoint para consultar el Ruc
 app.use("/api/sifen", sifenRoute);
 

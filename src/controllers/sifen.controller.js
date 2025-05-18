@@ -1,6 +1,7 @@
 import setApi from "facturacionelectronicapy-setapi";
 import path from "path";
 import fs from "fs";
+import { configuracionGlobal } from "../../config/configRoute.js";
 
 const __dirname = path.resolve();
 
@@ -13,23 +14,16 @@ const askRuc = async (req, res) => {
     }
 
     // Ruta absoluta del certificado
-    const certPath = path.join(
-      __dirname,
-      "src",
-      "certs",
-      "RAMON_MYSKO_BUBEN_VIT_S_A.p12"
-    );
+    const certPath = "/home/sebastian/FacturaElectronica/PEDRO_SEMENIUK_FEDORICHEN_VIT_S_A.p12"
     if (!fs.existsSync(certPath)) {
       return res.status(500).json({ error: "Certificado no encontrado" });
     }
 
-    const certPassword = process.env.CERT_PASSWORD;
-    const environment = process.env.ENV || "test";
-
+    const certPassword = configuracionGlobal.claveFirma;
+  
     const result = await setApi.default.consultaRUC(
       parseInt(id),
       ruc,
-      environment,
       certPath,
       certPassword,
       { debug: true, timeout: 90000 } // Configuración adicional

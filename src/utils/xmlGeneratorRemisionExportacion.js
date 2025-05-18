@@ -515,7 +515,7 @@ export const getDataRemisionExportacion = async (id) => {
       transportista: {
         contribuyente: contribuyenteTransportistaData || false,
         nombre: nombreTransportistaData[0]?.dNomTrans || null,
-        ruc: rucTransportistaData[0]?.rucTransportista ,
+        ruc: rucTransportistaData[0]?.rucTransportista,
         documentoTipo: documentoTipoTransportistaData[0]?.iTipIDTrans || null,
         documentoNumero: documentoNumeroTransportistaData[0]?.dNumIDTrans || null,
         direccion: direccionSalidaData[0]?.dDirLocSal || null,
@@ -529,11 +529,12 @@ export const getDataRemisionExportacion = async (id) => {
   };
 }
 
-const dataRemision = async () => {
-    const id = 1006;
-    const remision = await getDataRemision(id);
+const dataRemision = async (id) => {
+    const remision = await getDataRemisionExportacion(id);
     console.log(remision);
 }
+
+//dataRemision(882)
 
 const generadorDeXML = async (id) => {
   const parametros = await getParamsRemisionExportacion(id);

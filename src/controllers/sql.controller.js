@@ -3,6 +3,7 @@ import xmlgen from 'facturacionelectronicapy-xmlgen';
 import xmlsign from 'facturacionelectronicapy-xmlsign';
 import qrgen from 'facturacionelectronicapy-qrgen';
 import xml2js from 'xml2js';
+import setApi from 'facturacionelectronicapy-setapi'
 
 // IMPORT DE FUNCIONES
 import { getParamData, getParams } from "../utils/xmlGeneratorTest.js";
@@ -186,7 +187,7 @@ const getQRFacturaExportacionControler = async (req, res) => {
     const parametros = await getParamsFacturaExportacion(id);
     const data = await getDataFacturaExportacion(id);
 
-    console.log("Tipo de procedimineto: ", data.tipoDocumento);
+    console.log("Tipo de procedimineto: 2");
     console.log("Id de la transaccion: ", id);
     console.log("Fecha de la transaccion: ", new Date().toLocaleString());
 
@@ -244,7 +245,7 @@ const getQRRemisionExportacionControler = async (req, res) => {
     const parametros = await getParamsRemisionExportacion(id);
     const data = await getDataRemisionExportacion(id);
 
-    console.log("Tipo de procedimineto: ", data.tipoDocumento);
+    console.log("Tipo de procedimineto: 8");
     console.log("Id de la transaccion: ", id);
     console.log("Fecha de la transaccion: ", new Date().toLocaleString());
 

@@ -2,9 +2,12 @@ import { getDataById, getDataString, getDataBoolean, getDataFecha } from "../../
 import xmlgen from 'facturacionelectronicapy-xmlgen';
 import xmlsign from 'facturacionelectronicapy-xmlsign';
 import qrgen from 'facturacionelectronicapy-qrgen';
-import xml2js from 'xml2js';
+import xml2js, { parseString } from 'xml2js';
+import setApi from 'facturacionelectronicapy-setapi'
 
 import { configuracionGlobal } from "../../config/configRoute.js";
+
+console.log(configuracionGlobal)
 
 export const getParams = async (id) => {
   // Ejecuta cada consulta y guarda el resultado
@@ -288,7 +291,7 @@ export const getParamData = async (id) => {
   //detalles - items
   const codigoItemData = await getDataString(
     `SELECT dCodInt FROM tmpFactuDE_E8 WHERE tipo = 1 and idMov = ${id}`
-  );
+  )
   const descripcionItemData = await getDataString(
     `SELECT dDesProSer FROM tmpFactuDE_E8 WHERE tipo = 1 and idMov = ${id}`
   );
@@ -309,6 +312,11 @@ export const getParamData = async (id) => {
   );
   const ivaItemData = await getDataString(
     `SELECT dTasaIVA FROM tmpFactuDE_E82 WHERE tipo = 1 and idMov = ${id}`
+  );
+
+  // INFO EXTRA ULTIMA ACUTALIZACION SIFEN
+  const obligacionesData = await getDataString(
+    `SELECT cOblAfe, dDesOblAfe FROM tmpFactuDE_D11 WHERE tipo = 1 and idMov = ${id}`
   );
 
   const respuesta = await contribuyenteData.resultadoFinal;
@@ -399,34 +407,93 @@ export const getParamData = async (id) => {
           };
       },
     ),
+    extraInfo: {
+      obligaciones: obligacionesData.map(item => ({
+        cOblAfe: item.cOblAfe,
+        dDesOblAfe: item.dDesOblAfe
+      }))
+    }
 }}
 
 const generadorDeXML = async (id) => {
-  const parametros = await getParams(id)
-  const data = await  getParamData(id)
+  const parametros = await getParams(id);
+  const data = await getParamData(id);
 
-  
   if (parametros && data) {
-    const xml = xmlgen.default.generateXMLDE(parametros, data)
-    console.log(xml)
+    // Generar XML inicial
+    const xml = await xmlgen.default.generateXMLDE(parametros, data);
+
+    const xmlFirmado = await xmlsign.default.signXML(
+      xml, 
+      '/home/sebastian/FacturaElectronica/PEDRO_SEMENIUK_FEDORICHEN_VIT_S_A.p12', 
+      'seagro454'
+    ).catch(err => console.error("Error al firmar XML:", err));
+    // Generar QR
+    // En tu función generadorDeXML, después de generar el QR:
+    const QrFinal = await qrgen.default.generateQR(xmlFirmado, configuracionGlobal.idCSC, configuracionGlobal.CSC, configuracionGlobal.env).catch(err => console.log("Error al genera.r el QR: ", err));
+    // Parsear XML para modificar
+    const parser = new xml2js.Parser({
+      explicitArray: false,
+      ignoreAttrs: false,
+    });
+    
+    /* const injectXml = {
+      soap
+    } */
+
+    // Convertir a objeto JS
+    let xmlObj = await parser.parseStringPromise(QrFinal);
+    
+    return console.log(xmlObj)
+    
+    const gOpeCom = xmlObj.rDE.DE.gDatGralOpe.gOpeCom;
+
+    // Mapear las obligaciones
+    if(data.extraInfo.obligaciones && data.extraInfo.obligaciones.length > 0) {  // Aqui pregunto si hay resultado en las obligaciones
+      gOpeCom.gOblAfe = data.extraInfo.obligaciones.map(obligacion => ({
+        cOblAfe: obligacion.cOblAfe,
+        dDesOblAfe: obligacion.dDesOblAfe
+      }));
+    }
+
+    // Modifica el builder para incluir los namespaces necesarios
+    const builder = new xml2js.Builder({
+      xmldec: { version: '1.0', encoding: 'UTF-8' },
+      renderOpts: { pretty: true, indent: '  ' },
+      explicitRoot: false,
+      xmlns: { 
+        '': 'http://ekuatia.set.gov.py/sifen/xsd',
+        'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+      },
+      attrkey: '$'
+    });
+
+    // Agrega schemaLocation
+    xmlObj.rDE.$ = {
+      'xsi:schemaLocation': 'http://ekuatia.set.gov.py/sifen/xsd siRecepDE_v150.xsd'
+    };
+    // Convertir nuevamente a XML
+    const xmlModificado = builder.buildObject(xmlObj);
+    //console.log(xmlModificado);
+
   }
 }
 
+generadorDeXML(772)
 
 const firmadorDeXML = async (id) => {
   const parametros = await getParams(id);
   const data = await getParamData(id);
 
   if (parametros && data) {
-    console.log("Entre aca");
     // Esperamos que generateXMLDE resuelva y retorne el XML como cadena
     const xml = await xmlgen.default.generateXMLDE(parametros, data);
     // Ahora llamamos a signXML pasando el XML ya resuelto
-    const xmlFirmado = await xmlsign.default.signXML(xml, configuracionGlobal.firma, configuracionGlobal.claveFirma)
+    const xmlFirmado = await xmlsign.default.signXML(xml, '/home/sebastian/FacturaElectronica/PEDRO_SEMENIUK_FEDORICHEN_VIT_S_A.p12', 'seagro454')
       .catch(err => console.error("Error al firmar XML:", err));
 
     const QrFinal = await qrgen.default.generateQR(xmlFirmado)//.then(xml => console.log("XML con QR", xml));
-
+    console.log(QrFinal)
     const parser = new xml2js.Parser({
       explicitArray: false,
       tagNameProcessors: [xml2js.processors.stripPrefix],
@@ -440,10 +507,37 @@ const firmadorDeXML = async (id) => {
       // La estructura resultante se ajusta a los nombres de nodos sin prefijo
       // Accedemos al nodo gCamFuFD y luego a dCarQR
       const qrString = result.rDE.gCamFuFD.dCarQR;
-      console.log("QR extraído:", qrString);
+       //console.log("QR extraído:", qrString);
       // Aquí ya puedes trabajar con la cadena del QR (qrString)
     });    
 
-  }
+  } 
 
 };
+
+const enviarSifen = async (id) => {
+  const idRandom = Math.floor(Math.random() * 10000);
+  const xmlFirmado = await generadorDeXML(id) //.then(data => console.log(data))  // PARA MIRAR MI XML FORMADO
+  const env = 'test';
+
+  setApi.default
+    .recibe(idRandom, xmlFirmado, env, '/home/sebastian/FacturaElectronica/PEDRO_SEMENIUK_FEDORICHEN_VIT_S_A.p12', 'seagro454')
+    .then(xml => {
+      console.log("Respuesta SIFEN completa:", JSON.stringify(xml, null, 2)); // Para ver la estructura completa
+
+      // Acceder a gResProc
+      const gResProc = xml['ns2:rRetEnviDe']['ns2:rProtDe']['ns2:gResProc'];
+      console.log("gResProc:", gResProc);
+
+      // Si necesitas acceder a propiedades dentro de gResProc
+      if (gResProc) {
+        // Por ejemplo si es un objeto:
+        console.log("Detalle de gResProc:", gResProc['ns2:dCodRes']);
+        // O si es un array:
+        console.log("Primer elemento:", gResProc[0]);
+      }
+    });
+};
+
+
+//enviarSifen(772);

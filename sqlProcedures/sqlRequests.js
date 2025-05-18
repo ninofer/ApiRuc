@@ -29,7 +29,7 @@ export async function getDataString(query) {
   }
 }
 
-export async function getDataFecha(query) {
+export async function getDataFegetDataFechacha(query) {
   try {
     const result = await executeRequest({ query: query });
     console.log(result.recordset[0].fechaFactura);

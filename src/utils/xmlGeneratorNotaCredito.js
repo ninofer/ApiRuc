@@ -388,6 +388,6 @@ const generadorDeXML = async (id) => {
   }
   
   //dataRemision();
-  generadorDeXML(33)
+  //generadorDeXML(33)
 
 
