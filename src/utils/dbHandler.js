@@ -7,8 +7,6 @@ import { configuracionGlobal } from "../../config/configRoute.js";
 
 dotenv.config();
 
-
-
 const config = {
   server: configuracionGlobal.servidor,
   database: configuracionGlobal.nombreDB,

@@ -7,6 +7,7 @@ const __dirname = path.resolve();
 
 const askRuc = async (req, res) => {
   try {
+
     const { id, ruc } = req.query;
 
     if (!id || !ruc) {
@@ -14,7 +15,7 @@ const askRuc = async (req, res) => {
     }
 
     // Ruta absoluta del certificado
-    const certPath = "/home/sebastian/FacturaElectronica/PEDRO_SEMENIUK_FEDORICHEN_VIT_S_A.p12"
+    const certPath = "c:/FacturaElectronica/CertificadoElectronico/AgComercial.p12";
     if (!fs.existsSync(certPath)) {
       return res.status(500).json({ error: "Certificado no encontrado" });
     }
@@ -24,6 +25,7 @@ const askRuc = async (req, res) => {
     const result = await setApi.default.consultaRUC(
       parseInt(id),
       ruc,
+      'prod',
       certPath,
       certPassword,
       { debug: true, timeout: 90000 } // Configuración adicional

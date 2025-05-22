@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import sifenRoute from "./src/routes/sifen.route.js";
-import sqlRoute from "./src/routes/sql.route.js";
 
 dotenv.config();
 const app = express();
@@ -13,12 +12,6 @@ app.use(bodyParser.json());
 
 // Endpoint para consultar el Ruc
 app.use("/api/sifen", sifenRoute);
-
-// Endpoint para sql
-app.use("/api/sql", sqlRoute);
-
-// Endpoint para leer variable
-// app.use("/api/leerVariable", variableRoute);
 
 // Iniciar servidor
 app.listen(PORT, () => {
