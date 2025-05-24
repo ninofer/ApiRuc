@@ -33,7 +33,7 @@ const parseConfig = (data) => {
 
 export const getInformacion = () => {
   try {
-      const configData = readFile("c:/ApiRuc/AGComercialAcces.txt" );
+      const configData = readFile("C:/ApiRuc/AGComercialAcces.txt" );
       if (!configData) {
         throw new Error("No se pudo leer el archivo de configuración.");
       }
@@ -50,9 +50,9 @@ export const getInformacion = () => {
       const puerto = config["puerto"];
       const firma = config["nombreFirma"];
       const claveFirma = config["claveFirma"];
-      // const idCSC = config["idcsc"]
-      // const CSC = config['csc']
-      // const env = config['ambiente']
+      const idCSC = config["idcsc"]
+      const CSC = config['csc']
+      const env = config['ambiente']
 
       //console.log(servidor, nombreDB, usuario, claveBd, puerto, firma, claveFirma)
 
@@ -67,10 +67,10 @@ export const getInformacion = () => {
         claveBd,
         puerto,
         firma,
-        claveFirma
-        // idCSC,
-        // CSC,
-        // env
+        claveFirma,
+        idCSC,
+        CSC,
+        env
       };
     } catch (err) {
       console.error("Error en getInformacion:", err);
